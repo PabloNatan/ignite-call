@@ -29,7 +29,7 @@ model Account {
   user_id             String
   type                String
   provider            String
-  privider_account_id String
+  provider_account_id String
   refresh_token       String?
   access_token        String?
   expires_at          Int?
@@ -40,7 +40,7 @@ model Account {
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@unique([provider, privider_account_id])
+  @@unique([provider, provider_account_id])
   @@map("accounts")
 }
 
