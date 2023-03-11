@@ -44,6 +44,8 @@ export default async function handle(
 
   const startHour = time_start_in_minutes / 60
   const endHour = time_end_in_minutes / 60
+  const referenceDateStart = referenceDate.set('hour', startHour - 3).toDate()
+  const referenceDateEnd = referenceDate.set('hour', endHour - 3).toDate()
 
   const possibleTimes = Array.from({ length: endHour - startHour }).map(
     (_, i) => {
@@ -58,20 +60,20 @@ export default async function handle(
     where: {
       user_id: user.id,
       date: {
-        gte: referenceDate.set('hour', startHour).toDate(),
-        lte: referenceDate.set('hour', endHour).toDate(),
+        gte: referenceDateStart,
+        lte: referenceDateEnd,
       },
     },
   })
 
-  console.log(referenceDate.set('hour', startHour).toDate())
-  console.log(blockedTimes)
-  console.log(possibleTimes)
-
   const availableTimes = possibleTimes.filter((time) => {
-    return !blockedTimes.some(
-      (blockedTime) => blockedTime.date.getHours() === time,
+    const isTimeBlocked = blockedTimes.some(
+      (blockedTime) => blockedTime.date.getUTCHours() === time,
     )
+
+    const isTimeInPast = referenceDate.set('hour', time).isBefore(new Date())
+
+    return !isTimeBlocked && !isTimeInPast
   })
 
   return res.json({ possibleTimes, availableTimes })
