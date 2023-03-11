@@ -64,6 +64,10 @@ export default async function handle(
     },
   })
 
+  console.log(referenceDate.set('hour', startHour).toDate())
+  console.log(blockedTimes)
+  console.log(possibleTimes)
+
   const availableTimes = possibleTimes.filter((time) => {
     return !blockedTimes.some(
       (blockedTime) => blockedTime.date.getHours() === time,
