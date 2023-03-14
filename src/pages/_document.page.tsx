@@ -9,7 +9,6 @@ export default function Document() {
           id="stitches"
           dangerouslySetInnerHTML={{ __html: getCssText() }}
         />
-        <title>Ignite Call</title>
       </Head>
       <body>
         <Main />
